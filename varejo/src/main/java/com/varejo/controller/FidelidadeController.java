@@ -30,4 +30,9 @@ public class FidelidadeController {
 	public BigDecimal calcularDesconto(@PathVariable Long clienteId) {
 		return fidelidadeService.calcularDesconto(clienteId);
 	}
+	
+	@GetMapping("/{clienteId}")
+	public int consultarNivelFidelidade(@PathVariable Long clienteId) {
+		return fidelidadeService.consultarNivelFidelidade(clienteId);
+	}
 }

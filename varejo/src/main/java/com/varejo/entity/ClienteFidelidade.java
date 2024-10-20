@@ -2,6 +2,8 @@ package com.varejo.entity;
 
 import java.math.BigDecimal;
 
+import com.varejo.enums.NivelFidelidade;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,6 +25,8 @@ public class ClienteFidelidade {
 	
 	 // Nível de fidelidade do cliente: 1 (Bronze), 2 (Prata), 3 (Ouro)
 	private int nivelFidelidade; 
+	
+	private int pontosAcumulados;
 	
 	public ClienteFidelidade() {}
 
@@ -76,6 +80,18 @@ public class ClienteFidelidade {
 		
 		//depois de atualizar recalcula o nível de fidelidade do cliente
 		atualizarNivelFidelidade();
+		
+		// Adiciona pontos com base no valor da compra (1 ponto por R$10, por exemplo)
+		this.pontosAcumulados += valorCompra.divide(BigDecimal.TEN).intValue();
+	}
+	
+	public void resgatarPontos(int pontos) {
+		if(pontos <= this.pontosAcumulados) {
+			this.pontosAcumulados -= pontos;
+			// Lógica para aplicar desconto ou enviar produto
+		} else {
+			throw new RuntimeException("Pontos insuficientes para resgatar.");
+		}
 	}
 	
 	
@@ -100,4 +116,9 @@ public class ClienteFidelidade {
 			this.nivelFidelidade = 1; //nivel bronze
 		}
 	}
+	
+	public NivelFidelidade getNivelFidelidadeEnum() {
+	    return NivelFidelidade.fromValor(this.nivelFidelidade);
+	}
+
 }
