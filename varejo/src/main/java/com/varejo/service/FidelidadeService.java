@@ -1,6 +1,7 @@
 package com.varejo.service;
 
 import java.math.BigDecimal;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,8 @@ import com.varejo.entity.Cliente;
 import com.varejo.entity.ClienteFidelidade;
 import com.varejo.repository.ClienteFidelidadeRepository;
 import com.varejo.repository.ClienteRepository;
+
+//Eric
 
 @Service
 public class FidelidadeService {

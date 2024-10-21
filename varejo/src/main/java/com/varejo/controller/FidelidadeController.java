@@ -14,6 +14,7 @@ import com.varejo.entity.ClienteFidelidade;
 import com.varejo.service.FidelidadeService;
 
 
+//Eric
 
 @RestController
 @RequestMapping("/fidelidade")

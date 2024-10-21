@@ -20,48 +20,71 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@Override
-	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
-			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-		List<String> erros = new ArrayList<>();
-		for (FieldError erro : ex.getBindingResult().getFieldErrors()) {
-			erros.add(erro.getField() + ":" + erro.getDefaultMessage());
-		}
+    // Método já existente para tratamento de validação
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        List<String> erros = new ArrayList<>();
+        for (FieldError erro : ex.getBindingResult().getFieldErrors()) {
+            erros.add(erro.getField() + ":" + erro.getDefaultMessage());
+        }
 
-		ErroResposta erroResposta = new ErroResposta(status.value(), "Exitem campos inválidos", LocalDateTime.now(),
-				erros);
-		return super.handleExceptionInternal(ex, erroResposta, headers, status, request);
-	}
+        ErroResposta erroResposta = new ErroResposta(status.value(), "Existem campos inválidos", LocalDateTime.now(),
+                erros);
+        return super.handleExceptionInternal(ex, erroResposta, headers, status, request);
+    }
 
-	@Override
-	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
-			HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-		return ResponseEntity.badRequest().body(ex.getMessage());
-	}
+    // Tratamento para dados não legíveis
+    @Override
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
+            HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+        return ResponseEntity.badRequest().body(ex.getMessage());
+    }
 
-	@ExceptionHandler(EmailException.class)
-	protected ResponseEntity<Object> handleEmailException(EmailException ex) {
-		List<String> erros = new ArrayList<>();
-		erros.add(ex.getMessage());
-		ErroResposta erroResposta = new ErroResposta(HttpStatus.UNPROCESSABLE_ENTITY.value(),
-				"Exitem campos inválidos",
-				LocalDateTime.now(), erros);
+    // Tratamento para EmailException
+    @ExceptionHandler(EmailException.class)
+    protected ResponseEntity<Object> handleEmailException(EmailException ex) {
+        List<String> erros = new ArrayList<>();
+        erros.add(ex.getMessage());
+        ErroResposta erroResposta = new ErroResposta(HttpStatus.UNPROCESSABLE_ENTITY.value(),
+                "Existem campos inválidos",
+                LocalDateTime.now(), erros);
 
-		return ResponseEntity.unprocessableEntity().body(erroResposta);
+        return ResponseEntity.unprocessableEntity().body(erroResposta);
+    }
 
-	}
-	
-	@ExceptionHandler(HttpClientErrorException.class)
-	protected ResponseEntity<Object> handleClientErrorException(HttpClientErrorException ex) {
-		List<String> erros = new ArrayList<>();
-		erros.add(ex.getMessage());
-		ErroResposta erroResposta = new ErroResposta(HttpStatus.NOT_FOUND.value(),
-				"CEP inexistente",
-				LocalDateTime.now(), erros);
+    // Tratamento para HttpClientErrorException (CEP inexistente)
+    @ExceptionHandler(HttpClientErrorException.class)
+    protected ResponseEntity<Object> handleClientErrorException(HttpClientErrorException ex) {
+        List<String> erros = new ArrayList<>();
+        erros.add(ex.getMessage());
+        ErroResposta erroResposta = new ErroResposta(HttpStatus.NOT_FOUND.value(),
+                "CEP inexistente",
+                LocalDateTime.now(), erros);
 
-		return ResponseEntity.unprocessableEntity().body(erroResposta);
+        return ResponseEntity.unprocessableEntity().body(erroResposta);
+    }
 
-	}
-	
+    // Tratamento para ResourceNotFoundException
+    @ExceptionHandler(ResourceNotFoundException.class)
+    protected ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        List<String> erros = new ArrayList<>();
+        erros.add(ex.getMessage());
+        ErroResposta erroResposta = new ErroResposta(HttpStatus.NOT_FOUND.value(),
+                "Recurso não encontrado", LocalDateTime.now(), erros);
 
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erroResposta);
+    }
+
+    // Tratamento para InvalidDataException
+    @ExceptionHandler(InvalidDataException.class)
+    protected ResponseEntity<Object> handleInvalidDataException(InvalidDataException ex) {
+        List<String> erros = new ArrayList<>();
+        erros.add(ex.getMessage());
+        ErroResposta erroResposta = new ErroResposta(HttpStatus.BAD_REQUEST.value(),
+                "Dados inválidos", LocalDateTime.now(), erros);
+
+        return ResponseEntity.badRequest().body(erroResposta);
+    }
 }
+
