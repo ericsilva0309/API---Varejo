@@ -19,39 +19,34 @@ import com.varejo.service.CupomService;
 @RestController
 @RequestMapping("/varejo/cupons")
 public class CupomController {
-	@Autowired
-	private CupomService cupomService;
-	
-   
+    
+    @Autowired
+    private CupomService cupomService;
 
-/*
- 
+    
     @GetMapping
     public List<Cupom> listarCupons() {
         return cupomService.listarTodos();
     }
 
-   
+
     @GetMapping("/{codigo}")
-    public ResponseEntity<Cupom> buscarCupom(@PathVariable String codigo) {
-        Cupom cupom = cupomService.buscarPorCodigo(codigo);
-        if (cupom != null) {
-            return ResponseEntity.ok(cupom);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Cupom> buscarCupom(@PathVariable Long codigo) {
+        return cupomService.buscarPorCodigo(codigo)
+            .map(ResponseEntity::ok)
+            .orElse(ResponseEntity.notFound().build());
     }
 
-
-    /*@PostMapping
+    
+    @PostMapping
     public ResponseEntity<Cupom> criarCupom(@RequestBody Cupom cupom) {
-       Cupom novoCupom = cupomService.criarCupom(cupom);
-       return ResponseEntity.ok(novoCupom);
+        Cupom novoCupom = cupomService.criarCupom(cupom);
+        return ResponseEntity.ok(novoCupom);
     }
 
-
+    
     @PutMapping("/{codigo}")
-    public ResponseEntity<Cupom> atualizarCupom(@PathVariable String codigo, @RequestBody Cupom cupom) {
+    public ResponseEntity<Cupom> atualizarCupom(@PathVariable Long codigo, @RequestBody Cupom cupom) {
         Cupom cupomAtualizado = cupomService.atualizarCupom(codigo, cupom);
         if (cupomAtualizado != null) {
             return ResponseEntity.ok(cupomAtualizado);
@@ -60,14 +55,14 @@ public class CupomController {
         }
     }
 
-
+   
     @DeleteMapping("/{codigo}")
-    public ResponseEntity<Void> deletarCupom(@PathVariable String codigo) {
+    public ResponseEntity<Void> deletarCupom(@PathVariable Long codigo) {
         boolean deletado = cupomService.deletarCupom(codigo);
         if (deletado) {
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
         }
-    }*/
+    }
 }
