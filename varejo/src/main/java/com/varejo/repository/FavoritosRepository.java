@@ -1,4 +1,4 @@
-package com.varejo.exception;
+package com.varejo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
