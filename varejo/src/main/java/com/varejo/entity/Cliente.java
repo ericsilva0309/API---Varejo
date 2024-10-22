@@ -1,9 +1,12 @@
 package com.varejo.entity;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Cliente {
@@ -16,10 +19,34 @@ public class Cliente {
 	private String telefone;
 	private String email;
 	private String cpf;
-	private String cep;
+	
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "id_endereco")
+	private Endereco endereco;
+	
+	private String numero;
+	private String complemento;
 	
 	
 	
+	public Endereco getEndereco() {
+		return endereco;
+	}
+	public void setEndereco(Endereco endereco) {
+		this.endereco = endereco;
+	}
+	public String getNumero() {
+		return numero;
+	}
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+	public String getComplemento() {
+		return complemento;
+	}
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
 	public Long getId() {
 		return id;
 	}
@@ -49,12 +76,6 @@ public class Cliente {
 	}
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
-	}
-	public String getCep() {
-		return cep;
-	}
-	public void setCep(String cep) {
-		this.cep = cep;
 	}
 	
 	
