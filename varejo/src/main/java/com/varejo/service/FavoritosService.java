@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.varejo.entity.Cliente;
 import com.varejo.entity.Favoritos;
 import com.varejo.entity.Pedido;
-import com.varejo.exception.FavoritosRepository;
+import com.varejo.repository.FavoritosRepository;
 
 @Service
 public class FavoritosService {
