@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.varejo.entity.Cliente;
 import com.varejo.entity.Favoritos;
-import com.varejo.entity.Pedido;
+import com.varejo.entity.Produto;
 import com.varejo.service.FavoritosService;
 
 @RestController
@@ -27,13 +27,13 @@ public class FavoritosController {
 	 //Adicionar Favoritos
 	 
 	 @PostMapping("/adicionar")
-	 public ResponseEntity <Favoritos> adicionarFavorito(@RequestParam Long clienteId, @RequestParam Long pedidoId) {
+	 public ResponseEntity <Favoritos> adicionarFavorito(@RequestParam Long clienteId, @RequestParam Long produtoId) {
 		 Cliente cliente = new Cliente();
 		 cliente.setId(clienteId);             
-		 Pedido pedido = new Pedido(); 
-		 pedido.setId(pedidoId);
+		 Produto produto = new Produto(); 
+		 produto.setId(produtoId);
 		 
-		 Favoritos favorito = favoritosService.adicionarFavoritos(cliente, pedido);
+		 Favoritos favorito = favoritosService.adicionarFavoritos(cliente, produto);
 		 return ResponseEntity.ok(favorito);
 	 }
 		 

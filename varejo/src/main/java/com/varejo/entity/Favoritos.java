@@ -1,5 +1,4 @@
 package com.varejo.entity;
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
@@ -8,34 +7,33 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
 
 @Entity
+@SequenceGenerator(name = "favoritos_seq", sequenceName = "favoritos_seq", allocationSize = 50)
 public class Favoritos {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	
-	private Long id;
-	
-	@ManyToOne
-	@JoinColumn(name = "cliente_id", nullable = false)
-	private Cliente cliente;
-	
-	@ManyToOne
-    @JoinColumn(name = "pedido_id", nullable = false)
-    private Pedido pedido;
 
-	private LocalDateTime dataAdicionado;
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "favoritos_seq")
+    private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "Cliente_id", nullable = false)
+    private Cliente cliente;
 
-    // Construtores
+    @ManyToOne
+    @JoinColumn(name = "Produto_id", nullable = false)
+    private Produto produto;
+
+    private LocalDateTime dataAdicionado;
 
     public Favoritos() {
         this.dataAdicionado = LocalDateTime.now();  // Data atual ao adicionar um favorito
     }
 
-    public Favoritos(Cliente cliente, Pedido pedido) {
-        this.cliente = cliente;
-        this.pedido = pedido;
+    public Favoritos(Cliente Cliente, Produto Produto) {
+        this.cliente = Cliente;
+        this.produto = Produto;
         this.dataAdicionado = LocalDateTime.now();
     }
 
@@ -57,12 +55,12 @@ public class Favoritos {
         this.cliente = Cliente;
     }
 
-    public Pedido getPedido() {
-        return pedido;
+    public Produto getProduto() {
+        return produto;
     }
 
-    public void setPedido(Pedido Pedido) {
-        this.pedido = Pedido;
+    public void setProduto(Produto Produto) {
+        this.produto = Produto;
     }
 
     public LocalDateTime getDataAdicionado() {
