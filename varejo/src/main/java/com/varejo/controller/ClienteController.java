@@ -16,6 +16,9 @@ public class ClienteController {
 	
 	@Autowired
 	private FidelidadeService fidelidadeService;
+	
+//@Autowired
+//private CupomService cupomService;
 
 	@GetMapping
 	public List<ClienteFidelidade> listarClientesComNivelFidelidade(){
