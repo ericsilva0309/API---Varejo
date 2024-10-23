@@ -9,4 +9,5 @@ import com.varejo.entity.ClienteFidelidade;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long>{
 	Optional<Cliente> findById(Long id);
+	Optional<Cliente> findByEmail(String email);
 }

@@ -1,5 +1,7 @@
 package com.varejo.entity;
 
+import com.varejo.enums.NivelFidelidade;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -24,8 +24,8 @@ public class FidelidadeService {
 	@Autowired
 	private ClienteRepository clienteRepository;
 	
-	//@Autowired
-	//private EmailService emailService;
+	@Autowired
+	private EmailService emailService;
 	
 	 /**
      * Registra uma compra para um cliente, incrementando o total gasto e atualizando o nível de fidelidade.
@@ -75,7 +75,7 @@ public class FidelidadeService {
 				fidelidade.getTotalGasto()
 				);
 		
-		//emailService.enviarEmail(para, assunto, texto);
+		emailService.enviarEmail(para, assunto, texto);
 	}
 	
 	
@@ -112,17 +112,22 @@ public class FidelidadeService {
 	 * @return O nível de fidelidade do cliente ou 0 se o cliente não for encontrado.
 	 */
 	
-	public int consultarNivelFidelidade(Long clienteId) {
-		Optional<ClienteFidelidade> optionalFidelidade = fidelidadeRepository.findByClienteId(clienteId);
-		if(optionalFidelidade.isPresent()) {
-			ClienteFidelidade fidelidade = optionalFidelidade.get();
-			
-			enviarEmailNivelFidelidade(clienteId, fidelidade);
-			
-			return fidelidade.getNivelFidelidade();
-		}
-		
-		return 0;
+	public int consultarNivelFidelidadePorEmail(String email) {
+	    // Encontra o cliente pelo e-mail
+	    Cliente cliente = clienteRepository.findByEmail(email)
+	            .orElseThrow(() -> new RuntimeException("Cliente não encontrado com o e-mail: " + email));
+	    
+	    // Usa o ID do cliente para consultar o nível de fidelidade
+	    Optional<ClienteFidelidade> optionalFidelidade = fidelidadeRepository.findByClienteId(cliente.getId());
+	    
+	    if (optionalFidelidade.isPresent()) {
+	        ClienteFidelidade fidelidade = optionalFidelidade.get();
+	        // Enviar email com informações do nível de fidelidade
+	        enviarEmailNivelFidelidade(cliente.getId(), fidelidade);
+	        return fidelidade.getNivelFidelidade();
+	    }
+	    
+	    return 0; // Retornar 0 se não houver nível de fidelidade
 	}
 
 	private void enviarEmailNivelFidelidade(Long clienteId, ClienteFidelidade fidelidade) {
@@ -138,7 +143,7 @@ public class FidelidadeService {
 	    		fidelidade.getTotalGasto()
 	    		);
 	    
-	    //emailService.enviarEmail(para, assunto, texto);
+	    emailService.enviarEmail(para, assunto, texto);
 	}
 	
 	public List<ClienteFidelidade> listarClientesFidelidade() {
