@@ -73,6 +73,7 @@ public class CategoriaService {
         // Salva a categoria atualizada no banco de dados.
         return repository.save(categoria);
     }
+    
 
     /**
      * Exclui uma categoria do sistema.

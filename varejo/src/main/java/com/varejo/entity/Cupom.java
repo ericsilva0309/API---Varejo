@@ -20,7 +20,7 @@ public class Cupom {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String codigoCupom;
+	private Long idCupom;
 	
 	@ManyToOne
 	@JoinColumn(name = "id_cliente")
@@ -42,12 +42,12 @@ public class Cupom {
 	private TipoCupom tipoCupom;
 
 	
-	public String getCodigoCupom() {
-		return codigoCupom;
+	public Long getIdCupom() {
+		return idCupom;
 	}
 
-	public void setCodigoCupom(String codigoCupom) {
-		this.codigoCupom = codigoCupom;
+	public void setIdCupom(Long idCupom) {
+		this.idCupom = idCupom;
 	}
 
 	public BigDecimal getValorMinimo() {
