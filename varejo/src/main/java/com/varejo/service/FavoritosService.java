@@ -10,6 +10,8 @@ import com.varejo.entity.Favoritos;
 import com.varejo.entity.Produto;
 import com.varejo.repository.FavoritosRepository;
 
+//Parte Indiviidual: Ana Carolina 
+
 @Service
 public class FavoritosService {
 	

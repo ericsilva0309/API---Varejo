@@ -15,6 +15,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 
+//Parte Indiviidual: Marina Mayumi
+
 @Entity
 public class Cupom {
 	

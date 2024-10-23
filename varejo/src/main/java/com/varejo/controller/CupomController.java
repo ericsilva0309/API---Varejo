@@ -16,8 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.varejo.entity.Cupom;
 import com.varejo.service.CupomService;
 
+
+//Parte Indiviidual: Marina Mayumi
+
 @RestController
-@RequestMapping("/varejo/cupons")
+@RequestMapping("/cupons")
 public class CupomController {
     
     @Autowired

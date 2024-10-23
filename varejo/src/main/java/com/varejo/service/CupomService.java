@@ -1,5 +1,8 @@
 package com.varejo.service;
 
+
+//Parte Indiviidual: Marina Mayumi
+
 import java.util.List;
 import java.util.Optional;
 

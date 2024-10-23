@@ -18,6 +18,9 @@ import com.varejo.entity.Favoritos;
 import com.varejo.entity.Produto;
 import com.varejo.service.FavoritosService;
 
+//Parte Indiviidual: Ana Carolina
+
+
 @RestController
 @RequestMapping("/favoritos")
 public class FavoritosController {

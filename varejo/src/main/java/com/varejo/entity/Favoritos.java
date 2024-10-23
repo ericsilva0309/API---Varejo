@@ -7,6 +7,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.SequenceGenerator;
 
+
+//Parte Indiviidual: Ana Carolina
+
 @Entity
 @SequenceGenerator(name = "favoritos_seq", sequenceName = "favoritos_seq", allocationSize = 50)
 public class Favoritos {
