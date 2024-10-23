@@ -21,18 +21,26 @@ public class FavoritosService {
 		return favoritosRepository.save(favorito);
 	}
 	
+	//serviço remover
+	
 	public void removerFavorito(Long id) {
 		favoritosRepository.deleteById(id);  
 	}
 	
+	//listar favoritos
+ 	
 	public List<Favoritos> listarFavoritosPorCliente(Cliente cliente) {
 		return favoritosRepository.findAll();
 	}
+	
+	//buscarPorID
 
 	public Favoritos buscarFavoritoPorId(Long id) {
 		return null;
 	}
 
+	//atualizar
+	
 	public Favoritos atualizarFavorito(Favoritos favoritoExistente) {
 		return null;
 	}
