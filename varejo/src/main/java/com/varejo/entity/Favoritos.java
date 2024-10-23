@@ -1,6 +1,4 @@
 package com.varejo.entity;
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -25,16 +23,11 @@ public class Favoritos {
     @JoinColumn(name = "Produto_id", nullable = false)
     private Produto produto;
 
-    private LocalDateTime dataAdicionado;
-
-    public Favoritos() {
-        this.dataAdicionado = LocalDateTime.now();  // Data atual ao adicionar um favorito
-    }
 
     public Favoritos(Cliente Cliente, Produto Produto) {
         this.cliente = Cliente;
         this.produto = Produto;
-        this.dataAdicionado = LocalDateTime.now();
+
     }
 
     // Getters e Setters
@@ -63,11 +56,4 @@ public class Favoritos {
         this.produto = Produto;
     }
 
-    public LocalDateTime getDataAdicionado() {
-        return dataAdicionado;
-    }
-
-    public void setDataAdicionado(LocalDateTime dataAdicionado) {
-        this.dataAdicionado = dataAdicionado;
-    }
 }

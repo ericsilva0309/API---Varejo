@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,7 +40,7 @@ public class FavoritosController {
 		 
 	 //Deletar Favoritos
 	 
-	 @DeleteMapping
+	 @DeleteMapping ("/{id}")
 	 public ResponseEntity<String> removerFavorito(@PathVariable Long id) {
 		 favoritosService.removerFavorito(id);         
 		 return ResponseEntity.ok("Item removido com sucesso!");
@@ -54,4 +55,28 @@ public class FavoritosController {
 		 List<Favoritos> favoritos = favoritosService.listarFavoritosPorCliente(cliente);
 		 return ResponseEntity.ok(favoritos);
 		 }
+	 
+	 //Atualizar Favoritos
+	 
+	 @PutMapping("/atualizar/{id}")
+	 public ResponseEntity<Favoritos> atualizarFavorito(
+	         @PathVariable Long id,
+	         @RequestParam Long produtoId )
+	 
+	 {
+	     // Busca o favorito existente
+	     Favoritos favoritoExistente = favoritosService.buscarFavoritoPorId(id);
+	     if (favoritoExistente == null) {
+	         return ResponseEntity.notFound().build();
+	     }
+
+	     // Atualiza o produto no favorito
+	     Produto novoProduto = new Produto();
+	     novoProduto.setId(produtoId);
+	     favoritoExistente.setProduto(novoProduto);
+
+	     // Atualiza o favorito no banco
+	     Favoritos favoritoAtualizado = favoritosService.atualizarFavorito(favoritoExistente);
+	     return ResponseEntity.ok(favoritoAtualizado);
+	 }
 }

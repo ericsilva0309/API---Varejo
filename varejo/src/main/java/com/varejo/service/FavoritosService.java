@@ -29,4 +29,12 @@ public class FavoritosService {
 		return favoritosRepository.findAll();
 	}
 
+	public Favoritos buscarFavoritoPorId(Long id) {
+		return null;
+	}
+
+	public Favoritos atualizarFavorito(Favoritos favoritoExistente) {
+		return null;
+	}
+
 }
