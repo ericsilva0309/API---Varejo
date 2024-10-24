@@ -102,10 +102,12 @@ public class ClienteService {
         // Se o CEP for válido, prossegue com o salvamento do cliente
         Cliente clienteSalvo = repository.save(cliente);
 
-        emailService.enviarEmail(cliente.getEmail(), "Bem-vindo!", "Olá " + cliente.getNome() + ", "
-        		+ "seu cadastro foi realizado com sucesso!"+
-        		"\n\nPara comemorar seu cadastro, disponibilizamos um cupom de 15% de desconto na sua primeira compra. :D\n\n\n"
-        		+ "Cupom Primeira Compra:\n"+TipoCupom.PRIMEIRACOMPRA.getNomePorExtenso());
+        emailService.enviarEmailComImagem(cliente.getEmail(), 
+                "Bem-vindo!", 
+                "Olá " + cliente.getNome() + ", seu cadastro foi realizado com sucesso!<br>" +
+                "Para comemorar seu cadastro, disponibilizamos um cupom de 15% de desconto na sua primeira compra. :D<br><br>" +
+                "Cupom Primeira Compra: <br>" + TipoCupom.PRIMEIRACOMPRA.getNomePorExtenso(),
+                "https://img.myloview.com.br/quadros/oferta-especial-de-15-de-desconto-no-rotulo-ou-no-preco-400-123635673.jpg");
 
         return clienteSalvo;
     }

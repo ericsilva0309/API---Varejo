@@ -3,7 +3,11 @@ package com.varejo.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 @Service
 public class EmailService {
@@ -24,5 +28,18 @@ public class EmailService {
 		mensagem.setSubject(assunto);
 		mensagem.setText(texto);
 		emailSender.send(mensagem);
+	}
+		
+		public void enviarEmailComImagem(String para, String assunto, String texto, String urlImagem) throws MessagingException {
+			MimeMessage mensagem = emailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(mensagem, true);
+			
+			helper.setTo(para);
+			helper.setSubject(assunto);
+			
+			String conteudo = texto + "<br><img src=\"" + urlImagem + "\" alt=\"Imagem\"/>";
+			
+			helper.setText(conteudo, true);
+			emailSender.send(mensagem);
 	}
 }
