@@ -11,6 +11,7 @@ import com.varejo.dto.EnderecoResponseDTO;
 import com.varejo.entity.Cliente;
 import com.varejo.entity.ClienteFidelidade;
 import com.varejo.entity.Endereco;
+import com.varejo.enums.TipoCupom;
 import com.varejo.exception.ResourceNotFoundException;
 import com.varejo.repository.ClienteFidelidadeRepository;
 import com.varejo.repository.ClienteRepository;
@@ -22,10 +23,22 @@ public class ClienteService {
 
     private final ClienteRepository repository;
     private final EnderecoService enderecoService;
-    private final EmailService emailService; // Adicionando EmailService
+    private final EmailService emailService; // Serviço de e-mail para envio de notificações
     private final ClienteFidelidadeRepository fidelidadeRepository;
 
-    @Autowired
+    
+    /**
+     * O @Autowired no construtor informa ao Spring que ele deve injetar automaticamente
+     * as dependências quando criar a instância da classe ClienteService. Ou seja, o Spring
+     * irá fornecer as instâncias de ClienteRepository, EnderecoService, EmailService e 
+     * ClienteFidelidadeRepository, sem que seja necessário criar esses objetos manualmente.
+     * 
+     * Isso permite que a injeção de dependências seja automática, facilitando o controle do 
+     * ciclo de vida dos objetos e melhorando a testabilidade do código.
+     * 
+     * Necessário caso tivesse mais de um construtor, igual na antiga versão do código.
+     */
+    //@Autowired
     public ClienteService(ClienteRepository repository, EnderecoService enderecoService, EmailService emailService, ClienteFidelidadeRepository fidelidadeRepository) {
         this.repository = repository;
         this.enderecoService = enderecoService;
@@ -33,6 +46,13 @@ public class ClienteService {
         this.fidelidadeRepository = fidelidadeRepository; // Injetando o repositório de fidelidade
     }
 
+    /**
+     * Lista todos os clientes, verificando o nível de fidelidade e enviando um e-mail.
+     * Se o cliente tiver um registro de fidelidade, envia um e-mail com seu nível.
+     * Se não houver, o nível padrão de 1 será enviado no e-mail.
+     * 
+     * @return Lista de clientes.
+     */
     public List<Cliente> listar() {
         List<Cliente> clientes = repository.findAll();
         
@@ -43,13 +63,21 @@ public class ClienteService {
                 enviarEmailNivelFidelidade(cliente, nivelFidelidade);
             } else {
                 System.out.println("Nenhum registro de fidelidade encontrado para o cliente " + cliente.getNome());
-                enviarEmailNivelFidelidade(cliente, 1); // Enviar e-mail com nível 0 se não encontrado
+                enviarEmailNivelFidelidade(cliente, 1); // Enviar e-mail com nível 1 se não encontrado
             }
         }
         
         return clientes;
     }
-    
+
+    /**
+     * Salva um novo cliente no sistema, realizando uma verificação do CEP antes.
+     * Busca o endereço a partir do CEP informado e envia um e-mail de boas-vindas ao cliente.
+     * 
+     * @param cliente Cliente a ser salvo.
+     * @return Cliente salvo com o endereço validado e e-mail enviado.
+     * @throws MessagingException Caso haja um erro no envio de e-mail.
+     */
     public Cliente save(Cliente cliente) throws MessagingException {
         String cep = cliente.getEndereco().getCep();
         
@@ -74,12 +102,22 @@ public class ClienteService {
         // Se o CEP for válido, prossegue com o salvamento do cliente
         Cliente clienteSalvo = repository.save(cliente);
 
-        emailService.enviarEmail(cliente.getEmail(), "Bem-vindo!", "Olá " + cliente.getNome() + ", seu cadastro foi realizado com sucesso!");
+        emailService.enviarEmail(cliente.getEmail(), "Bem-vindo!", "Olá " + cliente.getNome() + ", "
+        		+ "seu cadastro foi realizado com sucesso!"+
+        		"\n\nPara comemorar seu cadastro, disponibilizamos um cupom de 15% de desconto na sua primeira compra. :D\n\n\n"
+        		+ "Cupom Primeira Compra:\n"+TipoCupom.PRIMEIRACOMPRA.getNomePorExtenso());
 
         return clienteSalvo;
     }
 
-
+    /**
+     * Edita os dados de um cliente existente, validando o CEP informado.
+     * 
+     * @param id ID do cliente a ser editado.
+     * @param cliente Cliente com os novos dados.
+     * @return Cliente editado e salvo no sistema.
+     * @throws ResourceNotFoundException Caso o cliente com o ID especificado não exista.
+     */
     public Cliente editar(Long id, Cliente cliente) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Cliente não encontrado com ID: " + id);
@@ -95,10 +133,16 @@ public class ClienteService {
         } catch (Exception e) {
             throw new IllegalArgumentException("Erro ao buscar o CEP. Verifique se o CEP é válido.");
         }
-        cliente.setId(id);
+        cliente.setId(id); // Define o ID para garantir que será feita uma edição e não criação de novo registro
         return repository.save(cliente);
     }
 
+    /**
+     * Exclui um cliente com base no ID informado.
+     * 
+     * @param id ID do cliente a ser excluído.
+     * @throws ResourceNotFoundException Caso o cliente com o ID especificado não exista.
+     */
     public void excluir(Long id) {
         if (!repository.existsById(id)) {
             throw new ResourceNotFoundException("Cliente não encontrado com ID: " + id);
@@ -106,6 +150,12 @@ public class ClienteService {
         repository.deleteById(id);
     }
     
+    /**
+     * Envia um e-mail ao cliente informando seu nível de fidelidade.
+     * 
+     * @param cliente Cliente a quem o e-mail será enviado.
+     * @param nivelFidelidade Nível de fidelidade a ser informado no e-mail.
+     */
     public void enviarEmailNivelFidelidade(Cliente cliente, int nivelFidelidade) {
         String para = cliente.getEmail();
         String assunto = "Informação sobre seu Nível de Fidelidade";
@@ -113,7 +163,6 @@ public class ClienteService {
             "Olá %s,\n\nSeu nível de fidelidade é %d.\n\nObrigado por ser nosso cliente!",
             cliente.getNome(),
             nivelFidelidade
-            //nivelFidelidade==1?"BRONZE":nivelFidelidade==2?"PRATA":"OURO"
         );
 
         emailService.enviarEmail(para, assunto, texto);

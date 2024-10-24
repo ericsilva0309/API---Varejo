@@ -29,7 +29,6 @@ public class CategoriaService {
             throw new ResourceNotFoundException("Nenhuma categoria encontrada.");
         }
         
-        // Retorna a lista de categorias.
         return categorias;
     }
 
@@ -45,7 +44,6 @@ public class CategoriaService {
             throw new InvalidDataException("Nome da categoria não pode ser nulo ou vazio.");
         }
         
-        // Se estiver tudo correto, salva a nova categoria no banco de dados usando o método save().
         return repository.save(categoria);
     }
 
@@ -67,10 +65,8 @@ public class CategoriaService {
             throw new InvalidDataException("O novo nome não pode ser nulo ou vazio.");
         }
 
-        // Define o novo nome da categoria.
         categoria.setNome(novoNome);
         
-        // Salva a categoria atualizada no banco de dados.
         return repository.save(categoria);
     }
     
@@ -86,7 +82,6 @@ public class CategoriaService {
             throw new ResourceNotFoundException("Categoria não encontrada para o ID: " + id);
         }
 
-        // Exclui a categoria pelo ID fornecido usando o método deleteById().
         repository.deleteById(id);
     }
 }

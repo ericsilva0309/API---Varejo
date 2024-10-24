@@ -49,6 +49,12 @@ public class FavoritosController {
 		 return ResponseEntity.ok("Item removido com sucesso!");
 	 }
 	 
+	 @GetMapping
+	    public ResponseEntity<List<Favoritos>> listarFavoritos() {
+	        List<Favoritos> favoritos = favoritosService.listar();
+	        return ResponseEntity.ok(favoritos);
+	    }
+	 
 	 //Listar Favoritos
 	 
 	 @GetMapping("/cliente/{clienteId}")
