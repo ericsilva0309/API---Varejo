@@ -106,13 +106,14 @@ public class ClienteService {
         repository.deleteById(id);
     }
     
-    private void enviarEmailNivelFidelidade(Cliente cliente, int nivelFidelidade) {
+    public void enviarEmailNivelFidelidade(Cliente cliente, int nivelFidelidade) {
         String para = cliente.getEmail();
         String assunto = "Informação sobre seu Nível de Fidelidade";
         String texto = String.format(
             "Olá %s,\n\nSeu nível de fidelidade é %d.\n\nObrigado por ser nosso cliente!",
             cliente.getNome(),
             nivelFidelidade
+            //nivelFidelidade==1?"BRONZE":nivelFidelidade==2?"PRATA":"OURO"
         );
 
         emailService.enviarEmail(para, assunto, texto);

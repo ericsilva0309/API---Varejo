@@ -1,7 +1,6 @@
 package com.varejo.service;
 
 import java.math.BigDecimal;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -23,6 +22,9 @@ public class FidelidadeService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private ClienteService clienteService;
 	
 	@Autowired
 	private EmailService emailService;
@@ -123,28 +125,29 @@ public class FidelidadeService {
 	    if (optionalFidelidade.isPresent()) {
 	        ClienteFidelidade fidelidade = optionalFidelidade.get();
 	        // Enviar email com informações do nível de fidelidade
-	        enviarEmailNivelFidelidade(cliente.getId(), fidelidade);
+	        clienteService.enviarEmailNivelFidelidade(cliente, 0);
+	        
 	        return fidelidade.getNivelFidelidade();
 	    }
 	    
 	    return 0; // Retornar 0 se não houver nível de fidelidade
 	}
 
-	private void enviarEmailNivelFidelidade(Long clienteId, ClienteFidelidade fidelidade) {
-	    Cliente cliente = clienteRepository.findById(clienteId)
-	    		.orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
-	    
-	    String para = cliente.getEmail();
-	    String assunto = "Consulta de nível de fidelidade";
-	    String texto = String.format(
-	    		"Olá, cliente %d! Seu nível de fidelidade é %d. Total gasto: %s",
-	    		clienteId,
-	    		fidelidade.getNivelFidelidade(),
-	    		fidelidade.getTotalGasto()
-	    		);
-	    
-	    emailService.enviarEmail(para, assunto, texto);
-	}
+//	private void enviarEmailNivelFidelidade(Long clienteId, ClienteFidelidade fidelidade) {
+//	    Cliente cliente = clienteRepository.findById(clienteId)
+//	    		.orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+//	    
+//	    String para = cliente.getEmail();
+//	    String assunto = "Consulta de nível de fidelidade";
+//	    String texto = String.format(
+//	    		"Olá, cliente %d! Seu nível de fidelidade é %s. Total gasto: %s",
+//	    		clienteId,
+//	    		(fidelidade.getNivelFidelidade()==1?"BRONZE":fidelidade.getNivelFidelidade()==2?"PRATA":"OURO"),
+//	    		fidelidade.getTotalGasto()
+//	    		);
+//	    
+//	    emailService.enviarEmail(para, assunto, texto);
+//	}
 	
 	public List<ClienteFidelidade> listarClientesFidelidade() {
         return fidelidadeRepository.findAll();
